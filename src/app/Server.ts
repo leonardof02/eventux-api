@@ -1,6 +1,8 @@
 import express, { Application } from "express"
 import dotenv from "dotenv";
 import cors from "cors";
+
+import AppDataSource from "../config/database.js";
 import UserRouter from "../routes/UserRouter.js";
 
 export default class Server {
@@ -34,9 +36,15 @@ export default class Server {
     }
 
     // Run server
-    public run() {
-        this.app.listen( this.port, () => {
-            console.log("🏃 Server running at port: " + this.port );
-        })
+    public async run() {
+        try {
+            await AppDataSource.initialize();
+            this.app.listen( this.port, () => {
+                console.log("🏃 Server running at port: " + this.port );
+            })
+        }
+        catch( error: any ) {
+            console.log(error);
+        }
     }
 }
