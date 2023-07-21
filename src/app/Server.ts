@@ -39,8 +39,10 @@ export default class Server {
     public async run() {
         try {
             await AppDataSource.initialize();
+            console.log(`🗄️  Database ${ AppDataSource.options.type } running!`);
+            console.log(`✅ ${ AppDataSource.options.database } connected!`);
             this.app.listen( this.port, () => {
-                console.log("🏃 Server running at port: " + this.port );
+                console.log(`🏃 Server running at port: :${this.port}` );
             })
         }
         catch( error: any ) {
