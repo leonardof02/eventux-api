@@ -1,7 +1,7 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
 @Entity()
-export default class Faculty extends BaseEntity {
+export default class Faculty {
     
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,6 +10,6 @@ export default class Faculty extends BaseEntity {
     name: string;
 
     @Column()
-    logoUrl: string;
+    logo_url: string;
 
 }
