@@ -5,6 +5,6 @@ import UserController from "../controllers/UserController.js";
 const UserRouter = express.Router();
 
 // -- Configure routes
-UserRouter.get( "/", UserController.sayHello );
+UserRouter.get( "/", UserController.getAll );
 
 export default UserRouter;

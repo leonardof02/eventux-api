@@ -6,7 +6,13 @@ const AppDataSource = new DataSource({
     host: "localhost",
     port: 5432,
     username: "postgres",
-    database: "eventuxdb"
+    database: "eventuxdb",
+    synchronize: true,
+    migrationsTableName: "migrations",
+    entities: [
+        "src/models/User",
+        "src/models/Faculty"
+    ]
 });
 
 export default AppDataSource;
