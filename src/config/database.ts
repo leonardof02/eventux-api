@@ -1,21 +1,17 @@
-import { DataSource } from "typeorm";
+import { Sequelize } from "sequelize";
 
-// Database connection settings
-const AppDataSource = new DataSource({
-    type: "postgres",
-    host: "localhost",
-    port: 5432,
-    username: "postgres",
+const host = process.env.DB_HOST;
+const database = process.env.DB_NAME;
+const user = process.env.DB_USER;
+
+const DBConnection = new Sequelize({
+    host,
     database: "eventuxdb",
-    synchronize: true,
-    migrationsTableName: "migrations",
-    entities: [
-        "src/models/User",
-        "src/models/Faculty"
-    ],
-    migrations: [
-        "src/migrations/*"
-    ]
-});
+    dialect: "postgres",
+    username: "postgres",
+    password: "",
+    logging: false,
+    port: 5432
+})
 
-export default AppDataSource;
+export default DBConnection;

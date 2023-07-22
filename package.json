@@ -23,7 +23,7 @@
     "express-validator": "^7.0.1",
     "pg": "^8.11.1",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.17"
+    "sequelize": "^6.32.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1",

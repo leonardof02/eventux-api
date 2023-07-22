@@ -1,22 +1,24 @@
 import express, { Application } from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 
 import UserRouter from "../routes/UserRouter";
 import FacultyRouter from "../routes/FacultyRouter";
-import AppDataSource from "../config/database";
+import connection from "../config/database";
+import dotenv from "dotenv";
+
 
 export default class Server {
     private app: Application;
     private port: string = "3000";
-
+    
     public constructor() {
         this.app = express();
         this.config();
     }
-
+    
     // Config server
     public config() {
+
         dotenv.config();
         this.port = process.env.PORT || "3000";
 
@@ -37,18 +39,22 @@ export default class Server {
         this.app.use("/facultys", FacultyRouter);
     }
 
-    // Run server
-    public async run() {
+    public async connectDB() {
         try {
-            await AppDataSource.initialize();
-            console.log(`🗄️  Database ${ AppDataSource.options.type } running!`);
-            console.log(`✅ ${ AppDataSource.options.database } connected!`);
-            this.app.listen( this.port, () => {
-                console.log(`🏃 Server running at port:${this.port}` );
-            })
-        }
-        catch( error: any ) {
+            await connection.authenticate({});
+            await connection.sync({ alter: true });
+            console.log(`🔁 All tables are sync!`);
+            console.log(`✅ ${connection.getDatabaseName() } connected!`);
+        } catch (error: any) {
             console.log(error);
         }
+    }
+
+    // Run server
+    public async run() {
+        await this.connectDB();
+        this.app.listen(this.port, () => {
+            console.log(`🏃 Server running at port :${this.port}`);
+        });
     }
 }
