@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "tsc --watch",
     "dev": "nodemon --exec 'ts-node src/app.ts' ",
-    "typeorm": "pnpm exec typeorm-ts-node-commonjs"
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js"
   },
   "keywords": [],
   "author": "",

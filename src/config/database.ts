@@ -12,6 +12,9 @@ const AppDataSource = new DataSource({
     entities: [
         "src/models/User",
         "src/models/Faculty"
+    ],
+    migrations: [
+        "src/migrations/*"
     ]
 });
 
