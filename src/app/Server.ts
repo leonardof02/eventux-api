@@ -42,7 +42,7 @@ export default class Server {
     public async connectDB() {
         try {
             await connection.authenticate({});
-            await connection.sync({ alter: true });
+            await connection.sync({alter: true});
             console.log(`🔁 All tables are sync!`);
             console.log(`✅ ${connection.getDatabaseName() } connected!`);
         } catch (error: any) {

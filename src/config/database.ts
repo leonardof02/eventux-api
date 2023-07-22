@@ -11,7 +11,7 @@ const DBConnection = new Sequelize({
     username: "postgres",
     password: "",
     logging: false,
-    port: 5432
+    port: 5432,
 })
 
 export default DBConnection;
