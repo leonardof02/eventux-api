@@ -7,6 +7,7 @@ import connection from "../config/database";
 import dotenv from "dotenv";
 
 import "../models/associations";
+import EventRouter from "../routes/EventRouter";
 
 export default class Server {
     private app: Application;
@@ -38,6 +39,7 @@ export default class Server {
     public routes() {
         this.app.use("/users", UserRouter);
         this.app.use("/faculties", FacultyRouter);
+        this.app.use("/events", EventRouter)
     }
 
     public async connectDB() {
