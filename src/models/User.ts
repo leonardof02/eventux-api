@@ -1,9 +1,9 @@
-import { Model, DataTypes } from "sequelize";
-import connection from "../config/database";
+import { Model, DataTypes, ModelStatic } from "sequelize";
+import sequelize from "../config/database";
+import { Faculty } from "./Faculty";
 
-class User extends Model {}
-
-User.init(
+export const User = sequelize.define(
+    "User",
     {
         fullName: {
             type: DataTypes.STRING,
@@ -17,22 +17,13 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false
         },
-        facultyId: {
-            type: DataTypes.BIGINT,
-        },
         profileImgUrl: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING
         },
         isAdmin: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         }
     },
-    {
-        sequelize: connection, 
-        modelName: "User",
-        timestamps: false
-    }
+    { timestamps: false }
 );
-
-export default User;

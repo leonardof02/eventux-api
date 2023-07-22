@@ -1,24 +1,18 @@
 import { Model, DataTypes } from "sequelize";
-import connection from "../config/database";
+import sequelize from "../config/database";
+import { User } from "./User";
 
-class Faculty extends Model {}
-
-Faculty.init(
+export const Faculty = sequelize.define(
+    "Faculty", 
     {
         name: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
         logoUrl: {
             type: DataTypes.STRING,
             allowNull: false
-        },
+        }
     },
-    {
-        sequelize: connection, 
-        modelName: "Faculty",
-        timestamps: false
-    }
+    { timestamps: false }
 );
-
-export default Faculty;

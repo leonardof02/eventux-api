@@ -6,6 +6,7 @@ import FacultyRouter from "../routes/FacultyRouter";
 import connection from "../config/database";
 import dotenv from "dotenv";
 
+import "../models/associations";
 
 export default class Server {
     private app: Application;
@@ -36,7 +37,7 @@ export default class Server {
     // Add routes
     public routes() {
         this.app.use("/users", UserRouter);
-        this.app.use("/facultys", FacultyRouter);
+        this.app.use("/faculties", FacultyRouter);
     }
 
     public async connectDB() {
