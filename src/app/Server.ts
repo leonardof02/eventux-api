@@ -2,12 +2,11 @@ import express, { Application } from "express"
 import dotenv from "dotenv";
 import cors from "cors";
 
-import AppDataSource from "../config/database.js";
-import UserRouter from "../routes/UserRouter.js";
+import UserRouter from "../routes/UserRouter";
 
 export default class Server {
     private app: Application;
-    private port: string;
+    private port: string = "3000";
 
     public constructor() {
         this.app = express();
@@ -38,11 +37,8 @@ export default class Server {
     // Run server
     public async run() {
         try {
-            await AppDataSource.initialize();
-            console.log(`🗄️  Database ${ AppDataSource.options.type } running!`);
-            console.log(`✅ ${ AppDataSource.options.database } connected!`);
             this.app.listen( this.port, () => {
-                console.log(`🏃 Server running at port: :${this.port}` );
+                console.log(`🏃 Server running at port :${this.port}` );
             })
         }
         catch( error: any ) {
