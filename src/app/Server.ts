@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 
 import "../models/associations";
 import EventRouter from "../routes/EventRouter";
+import AuthRouter from "../routes/AuthRouter";
 
 export default class Server {
     private app: Application;
@@ -39,7 +40,9 @@ export default class Server {
     public routes() {
         this.app.use("/users", UserRouter);
         this.app.use("/faculties", FacultyRouter);
-        this.app.use("/events", EventRouter)
+        this.app.use("/events", EventRouter);
+
+        this.app.use("/auth", AuthRouter);
     }
 
     public async connectDB() {
