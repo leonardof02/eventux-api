@@ -7,6 +7,5 @@ const AuthRouter = express.Router();
 
 // -- Configure routes
 AuthRouter.post( "/", Authenticator.authenticate );
-AuthRouter.get("/", Authenticator.isAuth() );
 
 export default AuthRouter;
