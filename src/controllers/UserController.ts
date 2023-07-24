@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import { validationResult } from "express-validator";
+import bcrypt from "bcrypt";
+
 import { User } from "../models/User";
 import { Faculty } from "../models/Faculty";
-import { validationResult } from "express-validator";
 import { UserRequest } from "../types";
 export default class UserController {
     // Implement Controllers
@@ -20,7 +22,8 @@ export default class UserController {
 
         try {
             const { fullName, email, password, facultyId } = req.body;
-            await User.create({ fullName, email, password, facultyId });
+            const encryptedPassword = bcrypt.hash(password, 10);
+            await User.create({ fullName, email, encryptedPassword, facultyId });
             res.status(200).json({
                 message: "User created successfully",
                 user: {
