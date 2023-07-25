@@ -1,5 +1,6 @@
 import { body } from "express-validator";
 import { Middleware } from "express-validator/src/base";
+import { Faculty } from "../../models/Faculty";
 
 export function userValidator(): Middleware[] {
     return [
@@ -16,6 +17,18 @@ export function userValidator(): Middleware[] {
         body("password")
             .isLength({ min: 6 })
             .withMessage("La contraseña debe tener al menos 6 caracteres."),
-        body("facultyId").isNumeric().withMessage("La facultad no existe")
+        body("facultyId")
+            .isNumeric()
+            .withMessage("La facultad no existe"),
+        body("facultyId")
+            .isNumeric()
+            .withMessage("Facultad invalida")
+            .custom( async ( id ) => {
+                    const faculty = await Faculty.findByPk(id);
+                    console.log(faculty);
+                    if( ! faculty )
+                        throw new Error("La facultad no existe");
+                    return true;
+            })
     ];
 }

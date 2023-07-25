@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import upload from "../../config/uploads";
 
-export function uploadEventImage() {
+export function uploadImage() {
     return [ upload.single("image"), handleUploadError ]
 }
 

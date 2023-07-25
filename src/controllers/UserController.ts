@@ -19,26 +19,24 @@ export default class UserController {
 
     public static async create(req: UserRequest, res: Response) {
         const errors = validationResult(req);
-        if (!errors.isEmpty()) return res.status(400).json({ errors });
+        if (!errors.isEmpty())
+            return res.status(400).json({ message: "Errores de validacion", errors });
 
         try {
             const { fullName, email, password, facultyId } = req.body;
-            const encryptedPassword = await bcrypt.hash(password, 10);
-            console.log(encryptedPassword);
+            const profileImgUrl = req.file ? req.file.path.replace(/^public/, "") : null;
             const user: UserModel = (await User.create({
                 fullName,
                 email,
-                password: encryptedPassword,
-                facultyId
+                password: await bcrypt.hash(password, 10),
+                facultyId,
+                profileImgUrl
             })) as UserModel;
             const token = Authenticator.generateToken(user.id);
             res.status(200).json({
                 message: "User created successfully",
                 token,
-                user: {
-                    fullName,
-                    email
-                }
+                user: { fullName, email }
             });
         } catch (err) {
             console.log(err);
