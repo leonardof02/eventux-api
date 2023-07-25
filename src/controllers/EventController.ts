@@ -16,6 +16,7 @@ export default class EventController {
     }
 
     public static async create(req: EventRequest, res: Response) {
+
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json({ errors });
 
@@ -24,7 +25,9 @@ export default class EventController {
             const newEvent = await Event.create({
                 name,
                 description,
-                userId: req.userId
+                userId: req.userId,
+                // Extract public/ from path
+                imgUrl: req.file.path.replace(/^public/, "")
             });
             res.status(200).json({
                 message: "Event Created!",
