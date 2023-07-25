@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 import { User } from "../models/User";
 import { Faculty } from "../models/Faculty";
-import { UserModel, UserRequest } from "../types";
+import { DeleteUserRequest, UserModel, UserRequest } from "../types";
 import Authenticator from "../security/Authenticator";
 export default class UserController {
     // Implement Controllers
@@ -19,7 +19,7 @@ export default class UserController {
 
     public static async create(req: UserRequest, res: Response) {
         const errors = validationResult(req);
-        if (!errors.isEmpty())
+        if ( ! errors.isEmpty())
             return res.status(400).json({ message: "Errores de validacion", errors });
 
         try {
@@ -45,5 +45,31 @@ export default class UserController {
                 errors: err.message
             });
         }
+    }
+
+    public static async delete(req: DeleteUserRequest, res: Response) {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return res.status(400).json({ message: "Errores de validacion", errors });
+
+        const id = req.params.id;
+        const user = (await User.findByPk(id)) as UserModel;
+
+        // if (!(id === req.userId.toString()) && !user.dataValues.isAdmin)
+        //     return res.status(403).json({
+        //         message: "El usuario no tiene los permisos para esto"
+        //     });
+
+        if (user) {
+            await user.destroy();
+            return res.status(200).json({
+                message: "Usuario eliminado correctamente",
+                id: user.dataValues.id
+            });
+        }
+        res.status(400).json({
+            message: `El usuario con ID: ${ id } no existe`
+        });
     }
 }

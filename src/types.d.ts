@@ -11,6 +11,11 @@ export interface EventRequest extends Request {
     userId: number
 }
 
+export interface DeleteUserRequest extends Request {
+    params: { id: string };
+    userId: number;
+}
+
 // ---------- Main Types
 interface User {
     id: number;
