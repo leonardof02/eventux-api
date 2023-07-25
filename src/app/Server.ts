@@ -60,7 +60,7 @@ export default class Server {
     public async run() {
         await this.connectDB();
         this.app.listen(this.port, () => {
-            console.log(`🏃 Server running at port :${this.port}`);
+            console.log(`🏃 Server running at http://localhost:${ this.port }`);
         });
     }
 }

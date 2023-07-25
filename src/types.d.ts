@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { Model, DataTypes } from "sequelize";
 
+// ---------- Extended Express Request
 export interface UserRequest extends Request {
     body: User;
 }
@@ -10,6 +11,7 @@ export interface EventRequest extends Request {
     userId: number
 }
 
+// ---------- Main Types
 interface User {
     id: number;
     fullName: string;
@@ -28,6 +30,7 @@ interface Event {
     attachedFileUrl?: string
 }
 
+// ---------- Models
 export class UserModel extends Model<User> implements User {
     public id: number;
     public username: string;
@@ -41,4 +44,13 @@ export class EventModel extends Model<Event> implements Event {
     public imgUrl: string;
     public date: string;
     public attachedFileUrl: string;
+}
+
+// ---------- Configs
+export type MulterErrorCallback = (error: Error | null, filename: string) => void;
+
+export interface MulterConfigCallback {
+    req: Request,
+    file: Express.Multer.File,
+    cb: MulterErrorCallback
 }
