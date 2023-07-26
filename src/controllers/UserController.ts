@@ -62,7 +62,8 @@ export default class UserController {
 
         try {
             if (user) {
-                await deleteImg(`${PUBLIC_PATH}${user.dataValues.profileImgUrl}`);
+                if (user.dataValues.profileImgUrl)
+                    await deleteImg(`${PUBLIC_PATH}${user.dataValues.profileImgUrl}`);
                 await user.destroy();
                 return res.status(200).json({
                     message: "Usuario eliminado correctamente",
