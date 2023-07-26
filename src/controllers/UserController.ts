@@ -1,11 +1,15 @@
+import fs from "fs";
+import { promisify } from "util";
+
+import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import bcrypt from "bcrypt";
 
+import Authenticator from "../security/Authenticator";
+import { PUBLIC_PATH } from "../config/paths";
+import { DeleteUserRequest, UserModel, UserRequest } from "../types";
 import { User } from "../models/User";
 import { Faculty } from "../models/Faculty";
-import { DeleteUserRequest, UserModel, UserRequest } from "../types";
-import Authenticator from "../security/Authenticator";
 export default class UserController {
     // Implement Controllers
     public static async getAll(req: Request, res: Response) {
@@ -19,7 +23,7 @@ export default class UserController {
 
     public static async create(req: UserRequest, res: Response) {
         const errors = validationResult(req);
-        if ( ! errors.isEmpty())
+        if (!errors.isEmpty())
             return res.status(400).json({ message: "Errores de validacion", errors });
 
         try {
@@ -48,7 +52,7 @@ export default class UserController {
     }
 
     public static async delete(req: DeleteUserRequest, res: Response) {
-
+        const deleteImg = promisify(fs.unlink);
         const errors = validationResult(req);
         if (!errors.isEmpty())
             return res.status(400).json({ message: "Errores de validacion", errors });
@@ -56,20 +60,23 @@ export default class UserController {
         const id = req.params.id;
         const user = (await User.findByPk(id)) as UserModel;
 
-        // if (!(id === req.userId.toString()) && !user.dataValues.isAdmin)
-        //     return res.status(403).json({
-        //         message: "El usuario no tiene los permisos para esto"
-        //     });
-
-        if (user) {
-            await user.destroy();
-            return res.status(200).json({
-                message: "Usuario eliminado correctamente",
-                id: user.dataValues.id
+        try {
+            if (user) {
+                await deleteImg(`${PUBLIC_PATH}${user.dataValues.profileImgUrl}`);
+                await user.destroy();
+                return res.status(200).json({
+                    message: "Usuario eliminado correctamente",
+                    id: user.dataValues.id
+                });
+            }
+            res.status(400).json({
+                message: `El usuario con ID: ${id} no existe`
+            });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({
+                message: `Ha ocurrido un error a la hora de borrar`
             });
         }
-        res.status(400).json({
-            message: `El usuario con ID: ${ id } no existe`
-        });
     }
 }

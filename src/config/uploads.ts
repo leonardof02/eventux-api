@@ -6,7 +6,6 @@ import multer, { FileFilterCallback, Multer } from "multer";
 
 import { MulterErrorCallback } from "../types";
 
-
 const maxSize = 1e+8;
 const maxFiles = 3;
 const acceptedMIMETypes = ["image/png", "image/jpg", "image/jpeg", "image/svg"];
