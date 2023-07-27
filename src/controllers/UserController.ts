@@ -1,5 +1,4 @@
 import fs from "fs";
-import { promisify } from "util";
 
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
@@ -52,7 +51,6 @@ export default class UserController {
     }
 
     public static async delete(req: DeleteUserRequest, res: Response) {
-        const deleteImg = promisify(fs.unlink);
         const errors = validationResult(req);
         if (!errors.isEmpty())
             return res.status(400).json({ message: "Errores de validacion", errors });
@@ -63,7 +61,7 @@ export default class UserController {
         try {
             if (user) {
                 if (user.dataValues.profileImgUrl)
-                    await deleteImg(`${PUBLIC_PATH}${user.dataValues.profileImgUrl}`);
+                    await fs.promises.unlink(`${PUBLIC_PATH}${user.dataValues.profileImgUrl}`);
                 await user.destroy();
                 return res.status(200).json({
                     message: "Usuario eliminado correctamente",
