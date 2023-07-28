@@ -16,6 +16,11 @@ export interface DeleteUserRequest extends Request {
     userId: number;
 }
 
+export interface DeleteEventRequest extends Request {
+    params: { id: string };
+    userId: number;
+}
+
 // ---------- Main Types
 interface User {
     id: number;
@@ -44,6 +49,7 @@ export class UserModel extends Model<User> implements User {
 }
 
 export class EventModel extends Model<Event> implements Event {
+    public id: number;
     public name: string;
     public description: string;
     public imgUrl: string;
