@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import UserController from "../controllers/UserController";
 import { userValidator } from "../middlewares/validators/userValidator";
 import Authenticator from "../security/Authenticator";
-import { idParams } from "../middlewares/validators/idParams";
+import { idParams } from "../middlewares/validators/idParamsValidator";
 import { uploadImage } from "../middlewares/uploads/uploadImage";
 
 // Route name: /users

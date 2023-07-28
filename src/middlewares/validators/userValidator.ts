@@ -1,6 +1,7 @@
 import { body } from "express-validator";
 import { Middleware } from "express-validator/src/base";
 import { Faculty } from "../../models/Faculty";
+import validateErrors from "./validateErrors";
 
 export function userValidator(): Middleware[] {
     return [
@@ -29,6 +30,7 @@ export function userValidator(): Middleware[] {
                     if( ! faculty )
                         throw new Error("La facultad no existe");
                     return true;
-            })
+            }),
+        validateErrors
     ];
 }

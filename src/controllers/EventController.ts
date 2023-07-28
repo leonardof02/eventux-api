@@ -19,8 +19,6 @@ export default class EventController {
     }
 
     public static async create(req: EventRequest, res: Response) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) return res.status(400).json({ errors });
 
         try {
             const { name, date, description } = req.body;
@@ -45,8 +43,6 @@ export default class EventController {
     }
 
     public static async update(req: EventRequest, res: Response) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) return res.status(400).json({ errors });
 
         try {
             const id = req.params.id;

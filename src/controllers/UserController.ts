@@ -21,9 +21,6 @@ export default class UserController {
     }
 
     public static async create(req: UserRequest, res: Response) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(400).json({ message: "Errores de validacion", errors });
 
         try {
             const { fullName, email, password, facultyId } = req.body;
@@ -51,9 +48,6 @@ export default class UserController {
     }
 
     public static async delete(req: DeleteUserRequest, res: Response) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(400).json({ message: "Errores de validacion", errors });
 
         const id = req.params.id;
         const user = (await User.findByPk(id)) as UserModel;

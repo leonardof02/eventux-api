@@ -5,7 +5,7 @@ import { uploadImage } from "../middlewares/uploads/uploadImage";
 
 import EventController from "../controllers/EventController";
 import Authenticator from "../security/Authenticator";
-import { idParams } from "../middlewares/validators/idParams";
+import { idParams } from "../middlewares/validators/idParamsValidator";
 
 // Route name: /users
 const EventRouter = express.Router();
