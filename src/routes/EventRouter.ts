@@ -13,6 +13,8 @@ const EventRouter = express.Router();
 // -- Configure routes
 EventRouter.get( "/", EventController.getAll );
 EventRouter.post( "/", Authenticator.isAuth(), uploadImage(), EventController.create );
+EventRouter.put( "/:id", idParams(), Authenticator.isAuth(), EventController.update );
 EventRouter.delete( "/:id", idParams(), Authenticator.isAuth(), EventController.delete );
+
 
 export default EventRouter;

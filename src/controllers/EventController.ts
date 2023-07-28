@@ -19,7 +19,6 @@ export default class EventController {
     }
 
     public static async create(req: EventRequest, res: Response) {
-
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json({ errors });
 
@@ -45,35 +44,74 @@ export default class EventController {
         }
     }
 
-    public static async delete( req: DeleteEventRequest, res: Response ) {
+    public static async update(req: EventRequest, res: Response) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) return res.status(400).json({ errors });
 
         try {
+            const id = req.params.id;
+            const { name, date, description } = req.body;
+            const event = (await Event.findByPk(id)) as EventModel;
 
-            const event = await Event.findByPk(req.params.id) as EventModel;
-    
-            if( ! event )
-                return res.status(404).json({ 
-                    message: "Evento no encontrado"
-                })
-    
-            if( event.id !== req.userId  )
+            if (!event)
+                res.status(404).json({
+                    message: `Evento con id ${id} no existe`
+                });
+
+            if (event.user.id !== req.userId)
                 return res.status(403).json({
                     message: "No esta autorizado a realizar esa operacion"
-                })
-    
-            if( event.imgUrl )
-                await fs.promises.unlink(`${PUBLIC_PATH}${event.imgUrl}`);
-            
+                });
+
+            await event.update(
+                {
+                    name,
+                    description,
+                    date
+                },
+                { where: { id } }
+            );
+
+            res.status(200).json({
+                message: "Event Updated!",
+                event: event.dataValues
+            });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({
+                message: "Server internal error",
+                errors: err.message
+            });
+        }
+    }
+
+    public static async delete(req: DeleteEventRequest, res: Response) {
+        try {
+            const event = (await Event.findByPk(req.params.id, {
+                include: User
+            })) as EventModel;
+
+            if (!event)
+                return res.status(404).json({
+                    message: "Evento no encontrado"
+                });
+
+            if (event.user.id !== req.userId)
+                return res.status(403).json({
+                    message: "No esta autorizado a realizar esa operacion"
+                });
+
+            if (event.imgUrl) await fs.promises.unlink(`${PUBLIC_PATH}${event.imgUrl}`);
+
             await event.destroy();
             return res.status(200).json({
-                message: `El evento con id ${ event.id } ha sido eliminado correctamente`
-            })
-        }
-        catch ( err ) {
-            console.error( err );
+                message: `El evento con id ${event.id} ha sido eliminado correctamente`
+            });
+        } catch (err) {
+            console.error(err);
             return res.status(500).json({
                 message: `Ha ocurrido un error`
-            })
+            });
         }
     }
 }

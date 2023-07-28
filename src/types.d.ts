@@ -9,6 +9,7 @@ export interface UserRequest extends Request {
 export interface EventRequest extends Request {
     body: Event,
     userId: number
+    params: { id: string }
 }
 
 export interface DeleteUserRequest extends Request {
@@ -23,7 +24,7 @@ export interface DeleteEventRequest extends Request {
 
 // ---------- Main Types
 interface User {
-    id: number;
+    id?: number;
     fullName: string;
     email: string;
     password?: string;
@@ -33,6 +34,7 @@ interface User {
 }
 
 interface Event {
+    id?: string,
     name: string,
     description: string,
     imgUrl?: string,
@@ -55,6 +57,7 @@ export class EventModel extends Model<Event> implements Event {
     public imgUrl: string;
     public date: string;
     public attachedFileUrl: string;
+    public user?: UserModel;
 }
 
 // ---------- Configs
