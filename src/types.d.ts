@@ -57,6 +57,7 @@ export class EventModel extends Model<Event> implements Event {
     public imgUrl: string;
     public date: string;
     public attachedFileUrl: string;
+    public userId: number;
     public user?: UserModel;
 }
 

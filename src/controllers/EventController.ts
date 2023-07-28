@@ -3,7 +3,7 @@ import fs from "fs";
 import { Request, Response } from "express";
 import { User } from "../models/User";
 import { Event } from "../models/Event";
-import { DeleteEventRequest, EventModel, EventRequest } from "../types";
+import { DeleteEventRequest, EventModel, EventRequest, UserModel } from "../types";
 import { validationResult } from "express-validator";
 import { PUBLIC_PATH } from "../config/paths";
 
@@ -19,7 +19,6 @@ export default class EventController {
     }
 
     public static async create(req: EventRequest, res: Response) {
-
         try {
             const { name, date, description } = req.body;
             const newEvent = await Event.create({
@@ -43,34 +42,33 @@ export default class EventController {
     }
 
     public static async update(req: EventRequest, res: Response) {
-
         try {
             const id = req.params.id;
             const { name, date, description } = req.body;
-            const event = (await Event.findByPk(id)) as EventModel;
+            const event = (await Event.findByPk(id, { include: User })) as EventModel;
+            const user = (await User.findByPk(event.userId)) as UserModel;
+
+            console.log(user);
 
             if (!event)
-                res.status(404).json({
+                return res.status(404).json({
                     message: `Evento con id ${id} no existe`
                 });
 
-            if (event.user.id !== req.userId)
+            if (user.id !== req.userId)
                 return res.status(403).json({
                     message: "No esta autorizado a realizar esa operacion"
                 });
 
-            await event.update(
-                {
-                    name,
-                    description,
-                    date
-                },
-                { where: { id } }
-            );
+            await event.update({
+                name,
+                description,
+                date
+            });
 
             res.status(200).json({
                 message: "Event Updated!",
-                event: event.dataValues
+                event
             });
         } catch (err) {
             console.log(err);
