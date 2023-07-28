@@ -12,10 +12,28 @@ import { idParams } from "../middlewares/validators/idParamsValidator";
 const EventRouter = express.Router();
 
 // -- Configure routes
-EventRouter.get( "/", EventController.getAll );
-EventRouter.post( "/", Authenticator.isAuth(), eventValidator(), uploadImage(), EventController.create );
-EventRouter.put( "/:id", idParams(), Authenticator.isAuth(), uploadImage(), eventValidator(), EventController.update );
-EventRouter.delete( "/:id", idParams(), Authenticator.isAuth(), eventValidator(), EventController.delete );
-
+EventRouter.get("/", EventController.getAll);
+EventRouter.post(
+    "/",
+    Authenticator.isAuth(),
+    eventValidator(),
+    uploadImage(),
+    EventController.create
+);
+EventRouter.put(
+    "/:id",
+    idParams(),
+    Authenticator.isAuth(),
+    uploadImage(),
+    eventValidator(),
+    EventController.update
+);
+EventRouter.delete(
+    "/:id",
+    idParams(),
+    Authenticator.isAuth(),
+    eventValidator(),
+    EventController.delete
+);
 
 export default EventRouter;

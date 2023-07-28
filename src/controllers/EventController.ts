@@ -46,6 +46,7 @@ export default class EventController {
             const id = req.params.id;
             const { name, date, description } = req.body;
             const event = (await Event.findByPk(id, { include: User })) as EventModel;
+            const currentImgUrl = event.imgUrl;
             const user = (await User.findByPk(event.userId)) as UserModel;
 
             console.log(user);
@@ -59,13 +60,20 @@ export default class EventController {
                 return res.status(403).json({
                     message: "No esta autorizado a realizar esa operacion"
                 });
-
+                
+                
             await event.update({
                 name,
                 description,
-                date
+                date,
             });
-
+                
+            if( req.file ) {
+                await fs.promises.unlink(`${PUBLIC_PATH}${event.imgUrl}`);
+                const imgUrl = req.file.path.replace(/^public/, "");
+                await event.update({ imgUrl });
+            }
+ 
             res.status(200).json({
                 message: "Event Updated!",
                 event
