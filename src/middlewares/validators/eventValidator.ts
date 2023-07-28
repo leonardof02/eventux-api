@@ -2,7 +2,7 @@ import { body } from "express-validator";
 import { Middleware } from "express-validator/src/base";
 import validateErrors from "./validateErrors";
 
-export function userValidator(): Middleware[] {
+export default function userValidator(): Middleware[] {
     return [
         body("name")
             .notEmpty()
