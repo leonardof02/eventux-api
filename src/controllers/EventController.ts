@@ -28,6 +28,7 @@ export default class EventController {
             const newEvent = await Event.create({
                 name,
                 description,
+                date,
                 userId: req.userId,
                 imgUrl: req.file.path.replace(/^public/, "")
             });
