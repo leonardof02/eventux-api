@@ -11,6 +11,7 @@ import { User } from "../models/User";
 import { Faculty } from "../models/Faculty";
 
 export default class UserController {
+
     // Implement Controllers 
     public static async getAll(req: Request, res: Response) {
         const users = await User.findAll({
@@ -26,7 +27,9 @@ export default class UserController {
             const { fullName, email, password, facultyId } = req.body;
             const profileImgUrl = req.file ? req.file.path.replace(/^public/, "") : null;
 
-            if( User.findOne({ where: { email } }) )
+            const existentUser = await User.findOne({ where: { email } });
+
+            if( existentUser )
                 return res.status(403).json({ message: "Ya existe un usuario con ese correo" })
 
             const user: UserModel = (await User.create({
