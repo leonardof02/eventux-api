@@ -9,8 +9,9 @@ import { PUBLIC_PATH } from "../config/paths";
 import { DeleteUserRequest, UserModel, UserRequest } from "../types";
 import { User } from "../models/User";
 import { Faculty } from "../models/Faculty";
+
 export default class UserController {
-    // Implement Controllers
+    // Implement Controllers 
     public static async getAll(req: Request, res: Response) {
         const users = await User.findAll({
             include: Faculty
@@ -21,10 +22,13 @@ export default class UserController {
     }
 
     public static async create(req: UserRequest, res: Response) {
-
         try {
             const { fullName, email, password, facultyId } = req.body;
             const profileImgUrl = req.file ? req.file.path.replace(/^public/, "") : null;
+
+            if( User.findOne({ where: { email } }) )
+                return res.status(403).json({ message: "Ya existe un usuario con ese correo" })
+
             const user: UserModel = (await User.create({
                 fullName,
                 email,

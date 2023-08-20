@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import { User } from "../models/User";
@@ -30,6 +30,8 @@ export default class Authenticator {
         const { email, password } = req.body;
         try {
             const user: UserModel = (await User.findOne({ where: { email } })) as UserModel;
+            if(!user)
+                return res.status(404).json({message: "El usuario no existe"})
             if (await bcrypt.compare(password, user.password)) {
                 const token = Authenticator.generateToken(user.id);
                 return res.status(200).json({ token });
@@ -37,6 +39,8 @@ export default class Authenticator {
             res.status(401).json({ message: "Invalid Credentials" });
         } catch (err) {
             console.log(err);
+            if( err instanceof TokenExpiredError )
+                return res.status(403).json({ message: "Sesion expirada, vuelva a autenticarse" });
             res.status(500).json({ message: "Internal Server Error" });
         }
     }
